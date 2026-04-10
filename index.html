@@ -315,9 +315,26 @@
   .rate-green { color: var(--green); font-weight: 700; }
   .rate-muted { color: var(--text-muted); }
 
+  /* ─── Pay Cards ─── */
+  .pay-card {
+    background: var(--surface); border-radius: 12px;
+    border: 1px solid var(--border); padding: 22px;
+  }
+  .pay-card .channel {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;
+  }
+  .rate-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .rate-row:last-child { border-bottom: none; }
+  .rate-row .label { color: var(--text-muted); }
+
   /* ─── Responsive ─── */
   @media (max-width: 768px) {
     .phase-grid, .pricing-grid, .why-grid, .team-cols, .tl-cols, .stats-strip { grid-template-columns: 1fr; flex-direction: column; }
+    #pricing div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
     #pricing .pricing-total + div + .pricing-total, div[style*="grid-template-columns:1fr auto 1fr"] { grid-template-columns: 1fr !important; }
     .arch-flow { flex-direction: column; }
     .arch-node { border-right: none; border-bottom: 1px solid var(--border); }
@@ -477,40 +494,55 @@
 
     <!-- Shopify Payments rates -->
     <div class="section-label" style="margin-top:8px;">Taux Shopify Payments (Canada)</div>
-    <h2 style="margin-bottom:12px;">Taux de traitement</h2>
-    <p class="section-sub">Taux Shopify Plus pour le Canada — négociés selon le volume.</p>
+    <h2 style="margin-bottom:12px;">Taux de traitement — Shopify Plus</h2>
+    <p class="section-sub">Taux officiels pour le Canada sur le plan Plus.</p>
 
-    <table class="rates-table fade-in">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="fade-in">
+
+      <!-- Online -->
+      <div class="pay-card">
+        <div class="channel">En ligne (DTC)</div>
+        <div class="rate-row"><span class="label">Visa / Mastercard domestique</span><span class="rate-green">2,15 % + 30 ¢</span></div>
+        <div class="rate-row"><span class="label">Visa / Mastercard international</span><span style="color:var(--text);font-weight:600;">3,15 % + 30 ¢</span></div>
+        <div class="rate-row"><span class="label">American Express</span><span style="color:var(--text);font-weight:600;">3,15 % + 30 ¢</span></div>
+      </div>
+
+      <!-- POS -->
+      <div class="pay-card">
+        <div class="channel">En magasin (POS)</div>
+        <div class="rate-row"><span class="label">Toutes cartes de crédit</span><span class="rate-green">2,40 %</span></div>
+        <div class="rate-row"><span class="label">Interac Débit (Canada)</span><span class="rate-green">0,10 $ / transaction</span></div>
+        <div class="rate-row"><span class="label">Tokenisation (retours sans carte)</span><span class="rate-green">✓ Inclus</span></div>
+      </div>
+
+    </div>
+
+    <table class="rates-table fade-in" style="margin-top:16px;">
       <thead>
         <tr>
-          <th style="width:55%;">Canal</th>
-          <th>Shopify Plus</th>
+          <th style="width:55%;">Autres frais</th>
+          <th>Taux</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>En magasin (POS)</td>
-          <td class="rate-green">Négociés selon volume¹</td>
+          <td>Frais de transaction — Shopify Payments activé</td>
+          <td class="rate-green">0,00 %</td>
         </tr>
         <tr>
-          <td>En ligne (DTC)</td>
-          <td class="rate-green">Négociés selon volume¹</td>
+          <td>Frais de transaction — 3rd party (SP désactivé)</td>
+          <td style="text-align:center;font-weight:600;">0,20 %</td>
         </tr>
         <tr>
-          <td>Frais de plateforme (3rd party)</td>
-          <td class="rate-green">0,20 %</td>
+          <td>Frais FX (multi-devises)</td>
+          <td style="text-align:center;font-weight:600;">2,00 %</td>
         </tr>
         <tr>
-          <td>Tokenisation (retours sans carte)</td>
-          <td class="rate-green">✓ Inclus</td>
-        </tr>
-        <tr>
-          <td>Shop Pay Express</td>
-          <td class="rate-green">✓ Économie supplémentaire</td>
+          <td>Shop Pay Versements (standard)</td>
+          <td style="text-align:center;font-weight:600;">5,0 % + 30 ¢</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:12px;">¹ Les taux Shopify Payments pour Plus sont négociés selon le volume — à confirmer avec l'équipe commerciale Shopify pour Quai Lafantaisie.</div>
   </div>
 </section>
 
