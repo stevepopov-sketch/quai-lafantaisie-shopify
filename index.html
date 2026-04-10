@@ -253,6 +253,52 @@
     display: flex; align-items: center; justify-content: center; gap: 12px;
   }
 
+  /* ─── Background Orbs ─── */
+  .bg-orbs {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(100px); opacity: 0.07;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: var(--green);
+    top: -100px; left: -100px;
+    animation: drift-1 40s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 500px; height: 500px;
+    background: var(--blue);
+    bottom: 10%; right: -80px;
+    animation: drift-2 50s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 400px; height: 400px;
+    background: var(--green);
+    top: 50%; left: 40%;
+    animation: drift-3 60s ease-in-out infinite;
+  }
+  @keyframes drift-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(120px, 80px) scale(1.1); }
+    66%       { transform: translate(60px, 160px) scale(0.95); }
+  }
+  @keyframes drift-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(-100px, -60px) scale(1.05); }
+    66%       { transform: translate(-160px, 40px) scale(1.1); }
+  }
+  @keyframes drift-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25%       { transform: translate(80px, -100px) scale(1.08); }
+    50%       { transform: translate(-60px, -140px) scale(0.95); }
+    75%       { transform: translate(-120px, 40px) scale(1.05); }
+  }
+  /* Ensure content sits above orbs */
+  nav, section, footer { position: relative; z-index: 1; }
+
   /* ─── Fade-in ─── */
   .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
   .fade-in.visible { opacity: 1; transform: none; }
@@ -363,6 +409,12 @@
 
 <!-- Main -->
 <div id="main">
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
 
 <nav>
   <div class="nav-brand">
