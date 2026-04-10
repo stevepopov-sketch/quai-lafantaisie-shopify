@@ -318,6 +318,7 @@
   /* ─── Responsive ─── */
   @media (max-width: 768px) {
     .phase-grid, .pricing-grid, .why-grid, .team-cols, .tl-cols, .stats-strip { grid-template-columns: 1fr; flex-direction: column; }
+    #pricing .pricing-total + div + .pricing-total, div[style*="grid-template-columns:1fr auto 1fr"] { grid-template-columns: 1fr !important; }
     .arch-flow { flex-direction: column; }
     .arch-node { border-right: none; border-bottom: 1px solid var(--border); }
     .arch-node:last-child { border-bottom: none; }
@@ -431,78 +432,99 @@
 <section id="pricing">
   <div class="wrapper">
     <div class="section-label">Tarification canadienne</div>
-    <h2>Shopify Plus + POS Pro</h2>
-    <p class="section-sub">Prix en CAD pour 12 succursales au Québec.</p>
+    <h2>Advanced vs Plus — 12 succursales</h2>
+    <p class="section-sub">Prix en CAD · facturation annuelle · POS Pro inclus pour chaque emplacement.</p>
 
+    <!-- Plan cards -->
     <div class="pricing-grid">
-      <div class="pricing-card featured fade-in">
-        <div class="pc-label">Shopify Plus</div>
-        <div class="pc-name">Plan de base</div>
-        <div class="pc-price">$3 400</div>
-        <div class="pc-per">CAD / mois · facturation annuelle</div>
-        <div class="pc-rows">
-          <div class="pc-row"><span class="pc-row-label">Boutiques d'expansion</span><span class="pc-row-val">9 incluses</span></div>
-          <div class="pc-row"><span class="pc-row-label">Comptes employés</span><span class="pc-row-val">Illimités</span></div>
-          <div class="pc-row"><span class="pc-row-label">Checkout extensible</span><span class="pc-row-val">Inclus</span></div>
-          <div class="pc-row"><span class="pc-row-label">B2B natif</span><span class="pc-row-val">Inclus</span></div>
-          <div class="pc-row"><span class="pc-row-label">Frais de transaction (3rd party)</span><span class="pc-row-val">0,20 %</span></div>
-        </div>
-      </div>
-
       <div class="pricing-card fade-in">
-        <div class="pc-label">Shopify POS Pro</div>
-        <div class="pc-name">Par succursale</div>
-        <div class="pc-price">$119</div>
-        <div class="pc-per">CAD / mois · par emplacement</div>
+        <div class="pc-label">Option A</div>
+        <div class="pc-name">Shopify Advanced + POS Pro</div>
+        <div class="pc-price">$1 817</div>
+        <div class="pc-per">CAD / mois · total estimé</div>
         <div class="pc-rows">
-          <div class="pc-row"><span class="pc-row-label">Succursales (Quai Laf.)</span><span class="pc-row-val">12</span></div>
-          <div class="pc-row"><span class="pc-row-label">Sous-total POS Pro</span><span class="pc-row-val">$1 428 / mois</span></div>
-          <div class="pc-row"><span class="pc-row-label">Inventaire unifié ecom + retail</span><span class="pc-row-val">Inclus</span></div>
-          <div class="pc-row"><span class="pc-row-label">Rapports avancés en magasin</span><span class="pc-row-val">Inclus</span></div>
-          <div class="pc-row"><span class="pc-row-label">Rôles & permissions staff</span><span class="pc-row-val">Inclus</span></div>
+          <div class="pc-row"><span class="pc-row-label">Plan Advanced</span><span class="pc-row-val">$389 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">POS Pro × 12 succursales</span><span class="pc-row-val">$1 428 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">Sous-total mensuel</span><span class="pc-row-val">$1 817 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">Total annuel estimé</span><span class="pc-row-val">~$21 804 / an</span></div>
+          <div class="pc-row"><span class="pc-row-label">Frais 3rd party</span><span class="pc-row-val">0,6 %</span></div>
+        </div>
+      </div>
+
+      <div class="pricing-card featured fade-in">
+        <div class="pc-label">Option B — Recommandé</div>
+        <div class="pc-name">Shopify Plus + POS Pro</div>
+        <div class="pc-price">$4 828</div>
+        <div class="pc-per">CAD / mois · total estimé</div>
+        <div class="pc-rows">
+          <div class="pc-row"><span class="pc-row-label">Plan Plus</span><span class="pc-row-val">$3 400 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">POS Pro × 12 succursales</span><span class="pc-row-val">$1 428 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">Sous-total mensuel</span><span class="pc-row-val">$4 828 / mois</span></div>
+          <div class="pc-row"><span class="pc-row-label">Total annuel estimé</span><span class="pc-row-val">~$57 936 / an</span></div>
+          <div class="pc-row"><span class="pc-row-label">Frais 3rd party</span><span class="pc-row-val">0,20 %</span></div>
         </div>
       </div>
     </div>
 
-    <div class="pricing-total fade-in">
-      <div>
-        <div class="pt-label">Total mensuel estimé (plan + 12 POS Pro)</div>
-        <div class="pt-note">Hors matériel · hors Shopify Payments · hors taxes</div>
+    <!-- Side-by-side totals -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:20px;" class="fade-in">
+      <div class="pricing-total" style="margin-bottom:0;">
+        <div>
+          <div class="pt-label">Advanced + POS Pro</div>
+          <div class="pt-note">facturation annuelle</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:22px;font-weight:900;color:var(--text);">$21 804</div>
+          <div class="pt-note">CAD/an</div>
+        </div>
       </div>
-      <div style="text-align:right;">
-        <div class="pt-val">$4 828 <span style="font-size:16px;font-weight:600;">CAD/mois</span></div>
-        <div class="pt-note">~$57 936 CAD/an</div>
+      <div style="text-align:center;color:var(--text-muted);font-size:13px;font-weight:600;">vs</div>
+      <div class="pricing-total" style="margin-bottom:0;border-color:rgba(0,210,122,0.3);">
+        <div>
+          <div class="pt-label" style="color:var(--green);">Plus + POS Pro</div>
+          <div class="pt-note">facturation annuelle</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="pt-val">$57 936</div>
+          <div class="pt-note">CAD/an</div>
+        </div>
       </div>
     </div>
 
+    <!-- Break-even callout -->
     <div class="callout green fade-in" style="margin-bottom:20px;">
-      <span style="font-size:22px;">🖥</span>
-      <div>Matériel : terminal POS ~$399 CAD · support tablette ~$149 CAD · iPads compatibles si iOS 15+. Estimation pour 5 stations : ~$2 740 CAD (une fois).</div>
+      <span style="font-size:22px;">⚖️</span>
+      <div>Le surcoût Plus vs Advanced est de <strong>~$36 132 CAD/an</strong>. Sur $35M CAD de GMV retail, il suffit que les taux Shopify Payments Plus soient <strong>0,10 % inférieurs</strong> à Advanced pour atteindre le seuil de rentabilité — et les économies s'accumulent ensuite.</div>
     </div>
 
-    <!-- Shopify Payments Rates -->
-    <div class="section-label" style="margin-top:48px;">Taux Shopify Payments (Canada)</div>
-    <h2 style="margin-bottom:12px;">Taux de traitement</h2>
-    <p class="section-sub">Comparaison entre Shopify Advanced (tarif présenté) et Shopify Plus.</p>
+    <div class="callout fade-in" style="margin-bottom:36px;">
+      <span style="font-size:22px;">🖥</span>
+      <div>Matériel (une fois) : terminal POS ~$399 CAD · support tablette ~$149 CAD · iPads compatibles iOS 15+. Estimation 5 stations : ~$2 740 CAD.</div>
+    </div>
+
+    <!-- Feature comparison -->
+    <div class="section-label" style="margin-top:8px;">Comparaison des fonctionnalités</div>
+    <h2 style="margin-bottom:12px;">Ce que vous gagnez avec Plus</h2>
+    <p class="section-sub">Au-delà du prix — ce qui change réellement pour Quai Lafantaisie.</p>
 
     <table class="rates-table fade-in">
       <thead>
         <tr>
-          <th>Canal</th>
-          <th>Shopify Advanced</th>
-          <th>Shopify Plus</th>
+          <th style="width:45%;">Fonctionnalité</th>
+          <th>Advanced</th>
+          <th>Plus</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>En ligne (DTC)</td>
-          <td class="rate-muted">2,4 % + 30 ¢</td>
-          <td class="rate-green">Taux négociés¹</td>
+          <td>Taux Shopify Payments (en magasin)</td>
+          <td class="rate-muted">2,4 %</td>
+          <td class="rate-green">Négociés selon volume¹</td>
         </tr>
         <tr>
-          <td>En magasin (POS)</td>
-          <td class="rate-muted">2,4 %</td>
-          <td class="rate-green">Taux négociés¹</td>
+          <td>Taux Shopify Payments (en ligne)</td>
+          <td class="rate-muted">2,4 % + 30 ¢</td>
+          <td class="rate-green">Négociés selon volume¹</td>
         </tr>
         <tr>
           <td>Frais de plateforme (3rd party)</td>
@@ -510,14 +532,44 @@
           <td class="rate-green">0,20 %</td>
         </tr>
         <tr>
-          <td>Shop Pay Express</td>
-          <td class="rate-muted">—</td>
-          <td class="rate-green">Économie supplémentaire</td>
+          <td>Tokenisation (retours sans carte)</td>
+          <td class="rate-muted">✓</td>
+          <td class="rate-green">✓</td>
         </tr>
         <tr>
-          <td>Tokenisation (retours sans carte)</td>
-          <td class="rate-muted">Partiel</td>
-          <td class="rate-green">✓ Inclus</td>
+          <td>Comptes employés</td>
+          <td class="rate-muted">15 inclus</td>
+          <td class="rate-green">Illimités</td>
+        </tr>
+        <tr>
+          <td>Limite de l'API Admin</td>
+          <td class="rate-muted">2 req/s</td>
+          <td class="rate-green">20 req/s</td>
+        </tr>
+        <tr>
+          <td>Checkout extensible (Checkout UI)</td>
+          <td class="rate-muted">Limité</td>
+          <td class="rate-green">Complet</td>
+        </tr>
+        <tr>
+          <td>Script Editor / Shopify Functions</td>
+          <td class="rate-muted">—</td>
+          <td class="rate-green">✓</td>
+        </tr>
+        <tr>
+          <td>Boutiques d'expansion</td>
+          <td class="rate-muted">—</td>
+          <td class="rate-green">9 incluses</td>
+        </tr>
+        <tr>
+          <td>TAM dédié & revues trimestrielles</td>
+          <td class="rate-muted">—</td>
+          <td class="rate-green">✓</td>
+        </tr>
+        <tr>
+          <td>SLA personnalisés & escalade incidents</td>
+          <td class="rate-muted">—</td>
+          <td class="rate-green">✓</td>
         </tr>
       </tbody>
     </table>
