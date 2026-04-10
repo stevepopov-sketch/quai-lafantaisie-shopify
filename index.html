@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quai Lafantaisie × Shopify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080c10;
+    --surface: #0f1520;
+    --surface2: #151d2a;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8edf5;
+    --text-muted: #7a8a9e;
+    --green: #00d27a;
+    --blue: #5c8ff5;
+    --font: 'Inter', -apple-system, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Gate ─── */
+  #gate {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+  }
+  .gate-logo { width: 44px; height: 44px; border-radius: 12px; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 8px; }
+  #gate h2 { font-size: 20px; font-weight: 700; }
+  #gate p { color: var(--text-muted); font-size: 14px; }
+  #gate-form { display: flex; gap: 10px; margin-top: 4px; }
+  #gate-input {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 16px; border-radius: 8px;
+    font-size: 15px; font-family: var(--font); outline: none; width: 220px;
+    transition: border-color 0.2s;
+  }
+  #gate-input:focus { border-color: var(--green); }
+  #gate-btn {
+    background: var(--green); color: #000; font-weight: 700;
+    border: none; padding: 10px 20px; border-radius: 8px;
+    font-size: 15px; cursor: pointer; font-family: var(--font);
+    transition: opacity 0.2s;
+  }
+  #gate-btn:hover { opacity: 0.85; }
+  #gate-error { color: #ff4d4d; font-size: 13px; min-height: 16px; }
+  #main { display: none; }
+
+  /* ─── Nav ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 60px;
+    background: rgba(8,12,16,0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+  }
+  .nav-brand { font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+  .nav-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--text-muted); transition: color 0.2s; text-decoration: none; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-badge {
+    font-size: 11px; font-weight: 700; padding: 4px 12px;
+    border-radius: 20px; letter-spacing: 0.05em;
+    background: rgba(0, 210, 122, 0.12); color: var(--green);
+    border: 1px solid rgba(0, 210, 122, 0.25);
+  }
+
+  /* ─── Layout ─── */
+  .wrapper { max-width: 1060px; margin: 0 auto; padding: 0 32px; }
+  section { padding: 100px 0; }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green);
+    margin-bottom: 14px;
+  }
+  h2 {
+    font-size: clamp(26px, 3.5vw, 38px); font-weight: 800;
+    line-height: 1.15; margin-bottom: 12px;
+  }
+  .section-sub { color: var(--text-muted); font-size: 16px; margin-bottom: 48px; max-width: 560px; }
+
+  /* ─── Hero ─── */
+  #hero { padding-top: 140px; padding-bottom: 80px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); background: var(--surface2);
+    border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  h1 {
+    font-size: clamp(40px, 6.5vw, 72px);
+    font-weight: 900; line-height: 1.05;
+    background: linear-gradient(135deg, #ffffff 0%, #8aa0c0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 18px;
+  }
+  .hero-sub { font-size: clamp(16px, 2vw, 19px); color: var(--text-muted); max-width: 580px; margin-bottom: 48px; }
+
+  /* Stats strip */
+  .stats-strip {
+    display: flex; gap: 0; margin-bottom: 0;
+    border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; background: var(--surface);
+    max-width: 720px;
+  }
+  .stat {
+    flex: 1; padding: 20px 24px; border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-val { font-size: 26px; font-weight: 900; color: var(--green); line-height: 1; margin-bottom: 4px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+  /* ─── Scope ─── */
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .phase-card {
+    background: var(--surface); border-radius: 14px;
+    border: 1px solid var(--border); padding: 28px;
+  }
+  .phase-card.active { border-top: 3px solid var(--green); }
+  .phase-card.future { border-top: 3px solid var(--blue); }
+  .phase-tag {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 6px; margin-bottom: 14px;
+  }
+  .tag-active { background: rgba(0,210,122,0.12); color: var(--green); }
+  .tag-future { background: rgba(92,143,245,0.12); color: var(--blue); }
+  .phase-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .phase-card .phase-date { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .phase-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .phase-card ul li { font-size: 14px; display: flex; align-items: flex-start; gap: 9px; color: var(--text); }
+  .phase-card.active ul li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .phase-card.future ul li::before { content: '◦'; color: var(--blue); font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+
+  /* ─── Timeline ─── */
+  #timeline { background: var(--surface); margin: 0; padding: 0; }
+  #timeline .wrapper { padding-top: 80px; padding-bottom: 80px; }
+  .tl-track { position: relative; padding-left: 28px; }
+  .tl-track::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -28px; top: 4px;
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tl-dot.done { background: var(--green); border-color: var(--green); }
+  .tl-dot.done::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
+  .tl-dot.active { background: var(--bg); border-color: var(--green); box-shadow: 0 0 0 4px rgba(0,210,122,0.15); }
+  .tl-dot.active::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .tl-date { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 2px; letter-spacing: 0.04em; }
+  .tl-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .tl-desc { font-size: 13px; color: var(--text-muted); }
+  .tl-item.milestone .tl-dot { background: var(--blue); border-color: var(--blue); }
+  .tl-item.milestone .tl-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
+  .tl-item.golive .tl-dot { background: var(--green); border-color: var(--green); width: 20px; height: 20px; left: -30px; }
+  .tl-item.golive .tl-title { color: var(--green); font-size: 17px; }
+
+  .tl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+
+  /* ─── Architecture ─── */
+  .arch-flow {
+    display: flex; align-items: stretch; gap: 0;
+    border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; background: var(--surface);
+  }
+  .arch-node {
+    flex: 1; padding: 28px 24px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .arch-node:last-child { border-right: none; }
+  .arch-node .node-icon { font-size: 28px; margin-bottom: 12px; }
+  .arch-node .node-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .arch-node .node-name { font-size: 17px; font-weight: 800; margin-bottom: 14px; }
+  .arch-node ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .arch-node ul li { font-size: 13px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 7px; }
+  .arch-node ul li::before { content: '–'; flex-shrink: 0; }
+  .arch-arrow {
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; flex-shrink: 0; width: 40px;
+    background: var(--surface2); border-right: 1px solid var(--border);
+    color: var(--text-muted); font-size: 18px; writing-mode: horizontal-tb;
+  }
+  .arch-note {
+    margin-top: 20px; background: var(--surface2);
+    border: 1px solid var(--border); border-left: 3px solid var(--blue);
+    border-radius: 10px; padding: 16px 20px; font-size: 14px;
+  }
+  .arch-note strong { color: var(--blue); }
+
+  /* ─── Why Shopify ─── */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .why-card {
+    background: var(--surface); border-radius: 14px;
+    border: 1px solid var(--border); padding: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .why-card:hover { border-color: rgba(0,210,122,0.3); transform: translateY(-2px); }
+  .why-icon { font-size: 28px; margin-bottom: 14px; }
+  .why-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .why-body { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+  .why-highlight { color: var(--green); font-weight: 600; }
+
+  /* ─── Team ─── */
+  .team-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .team-side h3 { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+  .team-cards { display: flex; flex-direction: column; gap: 10px; }
+  .person-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1px solid var(--border); padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .person-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800;
+  }
+  .av-merchant { background: rgba(92,143,245,0.15); color: var(--blue); }
+  .av-shopify { background: rgba(0,210,122,0.15); color: var(--green); }
+  .person-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .person-role { font-size: 13px; color: var(--text-muted); }
+  .person-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 3px; }
+
+  /* ─── Footer ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 32px; text-align: center;
+    color: var(--text-muted); font-size: 13px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+
+  /* ─── Fade-in ─── */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .phase-grid, .why-grid, .team-cols, .tl-cols, .stats-strip { grid-template-columns: 1fr; flex-direction: column; }
+    .arch-flow { flex-direction: column; }
+    .arch-node { border-right: none; border-bottom: 1px solid var(--border); }
+    .arch-node:last-child { border-bottom: none; }
+    .arch-arrow { display: none; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .wrapper { padding: 0 20px; }
+    section { padding: 72px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Gate -->
+<div id="gate">
+  <div class="gate-logo">🛍</div>
+  <h2>Quai Lafantaisie × Shopify</h2>
+  <p>Ressource du projet — accès restreint</p>
+  <div id="gate-form">
+    <input id="gate-input" type="password" placeholder="Code d'accès" autocomplete="off">
+    <button id="gate-btn" onclick="checkPassword()">Entrer</button>
+  </div>
+  <div id="gate-error"></div>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<nav>
+  <div class="nav-brand">
+    <span class="nav-pip"></span>
+    Quai Lafantaisie × Shopify
+  </div>
+  <div class="nav-links">
+    <a href="#scope">Portée</a>
+    <a href="#timeline">Calendrier</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#why">Pourquoi Shopify</a>
+    <a href="#team">Équipe</a>
+  </div>
+  <span class="nav-badge">Projet actif</span>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="wrapper">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Ressource de projet — Confidentiel</div>
+    <h1>Quai Lafantaisie<br>× Shopify</h1>
+    <p class="hero-sub">Migration POS + Payments pour 12 succursales au Québec. Phase 1 ciblée pour juillet 2026.</p>
+
+    <div class="stats-strip fade-in">
+      <div class="stat">
+        <div class="stat-val">12</div>
+        <div class="stat-label">succursales</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">$35M</div>
+        <div class="stat-label">CAD revenu annuel</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">Juil. 2026</div>
+        <div class="stat-label">Go-live Phase 1</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">Shopify<br><span style="font-size:14px;font-weight:600;">Plus</span></div>
+        <div class="stat-label">plan recommandé</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scope -->
+<section id="scope">
+  <div class="wrapper">
+    <div class="section-label">Portée du projet</div>
+    <h2>Ce qu'on construit</h2>
+    <p class="section-sub">Deux phases pour moderniser les opérations en magasin sans perturber NetSuite.</p>
+
+    <div class="phase-grid">
+      <div class="phase-card active fade-in">
+        <div class="phase-tag tag-active">Phase 1 — Prioritaire</div>
+        <h3>POS + Payments live</h3>
+        <div class="phase-date">Cible : juillet 2026</div>
+        <ul>
+          <li>Shopify POS déployé dans les 12 succursales</li>
+          <li>Shopify Payments remplace les terminaux déconnectés</li>
+          <li>Retours simples sur méthode de paiement originale</li>
+          <li>Retours sans carte présente via tokenisation</li>
+          <li>NetSuite demeure système d'enregistrement</li>
+          <li>Connecteur FarApp ou Celigo — chemin à confirmer</li>
+        </ul>
+      </div>
+      <div class="phase-card future fade-in">
+        <div class="phase-tag tag-future">Phase 2 — Post Go-live</div>
+        <h3>Synchro complète & échanges</h3>
+        <div class="phase-date">Cible : T3–T4 2026</div>
+        <ul>
+          <li>Flux d'échanges complexes automatisés</li>
+          <li>Création automatique de mémos de crédit dans NetSuite</li>
+          <li>Synchro d'inventaire complète NetSuite → Shopify</li>
+          <li>Ingestion des rapports de règlement Shopify Payments</li>
+          <li>Rapprochement financier automatisé</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section id="timeline">
+  <div class="wrapper">
+    <div class="section-label">Calendrier</div>
+    <h2>Étapes clés</h2>
+    <p class="section-sub">De la décision au lancement.</p>
+
+    <div class="tl-cols fade-in">
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;">Décision & Contrat</div>
+        <div class="tl-track">
+          <div class="tl-item">
+            <div class="tl-dot done"></div>
+            <div class="tl-date">9 avril 2026</div>
+            <div class="tl-title">Transition AE</div>
+            <div class="tl-desc">Steve Popov reprend le dossier de Mike Hollingsworth</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot active"></div>
+            <div class="tl-date">10 avril 2026</div>
+            <div class="tl-title">Appel intro + tarification Plus</div>
+            <div class="tl-desc">Présentation des taux Shopify Plus à Patrick. Décision de middleware (FarApp vs. Celigo).</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">11 avril 2026</div>
+            <div class="tl-title">Verdict tarification — Patrick</div>
+            <div class="tl-desc">Patrick confirme si les taux Plus sont acceptables</div>
+          </div>
+          <div class="tl-item milestone">
+            <div class="tl-dot"></div>
+            <div class="tl-date">14 avril 2026</div>
+            <div class="tl-title">Présentation aux actionnaires</div>
+            <div class="tl-desc">Patrick présente à 2 autres actionnaires (noms à identifier)</div>
+          </div>
+          <div class="tl-item milestone">
+            <div class="tl-dot"></div>
+            <div class="tl-date">17 avril 2026</div>
+            <div class="tl-title">Feu vert verbal</div>
+            <div class="tl-desc">Comité de décision confirme l'engagement</div>
+          </div>
+          <div class="tl-item milestone">
+            <div class="tl-dot"></div>
+            <div class="tl-date">18–25 avril 2026</div>
+            <div class="tl-title">Bon de commande</div>
+            <div class="tl-desc">Initié le 18, signé le 25 avril</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;">Implémentation</div>
+        <div class="tl-track">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Mai–Juin 2026</div>
+            <div class="tl-title">Configuration & intégration</div>
+            <div class="tl-desc">Shopify Plus provisionné. Connecteur middleware configuré. Tests de retours et paiements.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Juin 2026</div>
+            <div class="tl-title">Formation du personnel</div>
+            <div class="tl-desc">Formation POS pour les équipes en magasin. 30 vendeurs à former.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Juin 2026</div>
+            <div class="tl-title">Déploiement matériel</div>
+            <div class="tl-desc">5 terminaux POS + supports tablette. Vérification compatibilité iPads (iOS 15+).</div>
+          </div>
+          <div class="tl-item golive">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Juillet 2026</div>
+            <div class="tl-title">🟢 Go-live Phase 1</div>
+            <div class="tl-desc">POS + Payments live dans les 12 succursales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="wrapper">
+    <div class="section-label">Architecture technique</div>
+    <h2>Stack du projet</h2>
+    <p class="section-sub">NetSuite reste le système d'enregistrement. Shopify gère l'expérience client et les paiements.</p>
+
+    <div class="arch-flow fade-in">
+      <div class="arch-node">
+        <div class="node-icon">🗄</div>
+        <div class="node-label">ERP</div>
+        <div class="node-name">Oracle NetSuite</div>
+        <ul>
+          <li>Inventaire (système maître)</li>
+          <li>Finances & comptabilité</li>
+          <li>Mémos de crédit</li>
+          <li>Rapprochement règlement</li>
+          <li>Contact tech : Yan</li>
+        </ul>
+      </div>
+      <div class="arch-arrow">⇄</div>
+      <div class="arch-node" style="border-left:2px solid rgba(92,143,245,0.3);">
+        <div class="node-icon">🔗</div>
+        <div class="node-label">Middleware — À confirmer</div>
+        <div class="node-name">FarApp ou Celigo</div>
+        <ul>
+          <li>Sync des commandes NetSuite ↔ Shopify</li>
+          <li>Création auto mémos crédit (retours)</li>
+          <li>Ingestion rapports règlement Payments</li>
+          <li>Mapping clients walk-in génériques</li>
+          <li>Contact : Maria Camacho (FarApp)</li>
+        </ul>
+      </div>
+      <div class="arch-arrow">⇄</div>
+      <div class="arch-node" style="border-left:2px solid rgba(0,210,122,0.3);">
+        <div class="node-icon">🛍</div>
+        <div class="node-label">Commerce</div>
+        <div class="node-name">Shopify Plus</div>
+        <ul>
+          <li>POS — 12 succursales</li>
+          <li>Shopify Payments (tokenisation)</li>
+          <li>Boutique ecom (déjà live)</li>
+          <li>Admin unifié ecom + retail</li>
+          <li>Interface French native</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="arch-note fade-in" style="margin-top:20px;">
+      <strong>Décision ouverte :</strong> FarApp (connecteur actuel) vs. Celigo (solution enterprise recommandée). Maria Camacho doit confirmer si FarApp peut gérer la création automatique de mémos de crédit via l'API Shopify POS. Si non, migration vers Celigo recommandée pour Phase 1.
+    </div>
+  </div>
+</section>
+
+<!-- Why Shopify -->
+<section id="why">
+  <div class="wrapper">
+    <div class="section-label">Valeur business</div>
+    <h2>Pourquoi Shopify</h2>
+    <p class="section-sub">Chaque décision est ancrée dans un problème opérationnel réel.</p>
+
+    <div class="why-grid">
+      <div class="why-card fade-in">
+        <div class="why-icon">🔁</div>
+        <div class="why-title">Retours simplifiés de 7 étapes à 1</div>
+        <div class="why-body">Aujourd'hui, seulement <span class="why-highlight">5 des 30 vendeurs</span> peuvent traiter correctement un retour dans NetSuite (7–9 étapes manuelles). Shopify POS réduit ça à un flux en 1 étape accessible à tous.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">💳</div>
+        <div class="why-title">Retours sans carte présente — enfin possibles</div>
+        <div class="why-body">Le terminal actuel exige une saisie manuelle du montant et la présence physique de la carte. La <span class="why-highlight">tokenisation Shopify Payments</span> permet les remboursements à distance sur la transaction d'origine.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">Commerce unifié — ecom déjà live</div>
+        <div class="why-body">Quai Lafantaisie est déjà sur Shopify ecom (printemps 2026). Ajouter le POS = <span class="why-highlight">un seul admin, un seul inventaire, un seul profil client</span> — sans intégration tierce entre les canaux.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">🇫🇷</div>
+        <div class="why-title">Support client & admin en français</div>
+        <div class="why-body">Shopify Payments et l'interface admin supportent le français nativement. L'équipe de support Shopify est disponible en français — point explicitement demandé par <span class="why-highlight">Patrick</span> lors des appels.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section id="team">
+  <div class="wrapper">
+    <div class="section-label">Équipe projet</div>
+    <h2>Qui est impliqué</h2>
+    <p class="section-sub">Contacts clés des deux côtés.</p>
+
+    <div class="team-cols fade-in">
+      <div class="team-side">
+        <h3>Groupe QL</h3>
+        <div class="team-cards">
+          <div class="person-card">
+            <div class="person-avatar av-merchant">PB</div>
+            <div>
+              <div class="person-name">Patrick Bureau</div>
+              <div class="person-role">Propriétaire — Groupe QL</div>
+              <div class="person-note">Décideur principal. Rate-sensitive. Doit valider avec 2 actionnaires.</div>
+            </div>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar av-merchant">Y</div>
+            <div>
+              <div class="person-name">Yan</div>
+              <div class="person-role">Gestionnaire NetSuite — Entrepôt Gatineau</div>
+              <div class="person-note">Co-décideur technique. Propriétaire de l'intégrité des données.</div>
+            </div>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar av-merchant">MC</div>
+            <div>
+              <div class="person-name">Maria Camacho</div>
+              <div class="person-role">Consultante FarApp / NetSuite</div>
+              <div class="person-note">Architecte d'intégration côté client. Évalue FarApp pour les retours POS.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-side">
+        <h3>Shopify</h3>
+        <div class="team-cards">
+          <div class="person-card">
+            <div class="person-avatar av-shopify">SP</div>
+            <div>
+              <div class="person-name">Steve Popov</div>
+              <div class="person-role">Account Executive</div>
+              <div class="person-note">Reprend le dossier le 9 avril 2026.</div>
+            </div>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar av-shopify">KR</div>
+            <div>
+              <div class="person-name">Kamran Rahman (Kam)</div>
+              <div class="person-role">Solutions Engineer — Montréal</div>
+              <div class="person-note">3 appels de profondeur technique. Connaît le contexte NetSuite.</div>
+            </div>
+          </div>
+          <div class="person-card">
+            <div class="person-avatar av-shopify">AM</div>
+            <div>
+              <div class="person-name">Alex Memmi</div>
+              <div class="person-role">Manager — Shopify</div>
+              <div class="person-note">Sponsor interne. Présent sur tous les appels à venir.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="nav-pip"></span>
+  <span>Quai Lafantaisie × Shopify — Confidentiel · Ressource de projet</span>
+  <span class="nav-pip"></span>
+</footer>
+
+</div><!-- /main -->
+
+<script>
+  const PASSWORD = 'groupeql';
+  if (sessionStorage.getItem('ql_auth') === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    initAnimations();
+  }
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+  function checkPassword() {
+    const val = document.getElementById('gate-input').value.trim().toLowerCase();
+    if (val === PASSWORD) {
+      sessionStorage.setItem('ql_auth', '1');
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      initAnimations();
+    } else {
+      document.getElementById('gate-error').textContent = 'Code incorrect. Réessayez.';
+      document.getElementById('gate-input').value = '';
+      document.getElementById('gate-input').focus();
+      setTimeout(() => { document.getElementById('gate-error').textContent = ''; }, 2000);
+    }
+  }
+  function initAnimations() {
+    const els = document.querySelectorAll('.fade-in');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    els.forEach(el => obs.observe(el));
+  }
+</script>
+</body>
+</html>
